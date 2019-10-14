@@ -21,24 +21,41 @@ class ViewController: UIViewController {
     
     func ConnectToSocket() {
         
-        let headers = ["token": "x3OerE0MAkEk44fTbzGBbw=="]
+//        let headers = ["token": "x3OerE0MAkEk44fTbzGBbw=="]
+//        manager = SocketManager(
+//            socketURL: URL(string: "https://dev.krank.com:3000/auction")!,
+//            config: [
+//                .log(true),
+//                .compress,
+//                .forceNew(true),
+////                .reconnectAttempts(10),
+////                .reconnectWait(6000),
+//                .secure(true),
+//                .selfSigned(true),
+//                .forcePolling(false),
+//                .forceWebsockets(true),
+//                .extraHeaders(headers),
+//                .connectParams(headers)
+//            ]
+//        )
+        
+        
         manager = SocketManager(
             socketURL: URL(string: "https://dev.krank.com:3000/auction")!,
             config: [
                 .log(true),
-                .compress,
                 .forceNew(true),
-//                .reconnectAttempts(10),
-//                .reconnectWait(6000),
-                .secure(true),
-                .selfSigned(true),
-                .forcePolling(false),
+                .reconnectAttempts(10),
+                .reconnectWait(6000),
+                .connectParams(["token":"8KpFfNgdMs8vaPpufNYhyQ=="]),
                 .forceWebsockets(true),
-                .extraHeaders(headers),
-                .connectParams(headers)
+                .compress
             ]
         )
-        socketIOClient = manager.defaultSocket
+        
+        
+        
+        socketIOClient = manager.socket(forNamespace: "/auction")
         
         socketIOClient.on(clientEvent: .connect) {data, ack in
             print(data)
